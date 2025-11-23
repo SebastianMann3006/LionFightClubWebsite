@@ -179,63 +179,150 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
 
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Start Account widget
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-<section class="account-widget-section account-widget-section-two account-widget-section--style account-widget-section--style-two pt-120">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-12">
-                <div class="account-widget-form-area">
-                    <div class="row justify-content-center">
-                        <div class="col-xl-10 col-lg-12 text-center">
-                            <div class="section-header">
-                                <h2 class="section-title">For <span>Apply</span> Get Appointment <span>Today!</span></h2>
-                                <p>Fight School has specialized in martial arts since 1986 and has one of the most innovative most innovative programs in the nation.</p>
-                            </div>
-                        </div>
+<!-- Account widget converted to modal. Trigger with .header-action -->
+<!-- Modal markup -->
+<div id="applyModal" class="apply-modal" aria-hidden="true">
+    <div class="apply-modal-overlay" data-modal-close></div>
+    <div class="apply-modal-content" role="dialog" aria-modal="true" aria-labelledby="applyModalTitle">
+        <button class="apply-modal-close" type="button" aria-label="Close modal">&times;</button>
+        <div class="account-widget-form-area p-30">
+            <div class="row justify-content-center">
+                <div class="col-xl-10 col-lg-12 text-center">
+                    <div class="section-header">
+                        <h2 id="applyModalTitle" class="section-title">For <span>Apply</span> Get Appointment <span>Today!</span></h2>
+                        <p>Fight School has specialized in martial arts since 1986 and has one of the most innovative most innovative programs in the nation.</p>
                     </div>
-                    <form class="account-widget-form">
-                        <div class="row justify-content-center mb-20-none">
-                            <div class="col-xl-6 col-lg-6 form-group">
-                                <label>Enter Name</label>
-                                <input type="text" class="form--control" placeholder="Micle Joncina">
-                            </div>
-                            <div class="col-xl-6 col-lg-6 form-group">
-                                <label>Email Adress</label>
-                                <input type="email" class="form--control" placeholder="example@email.com">
-                            </div>
-                            <div class="col-xl-6 col-lg-6 form-group">
-                                <label>Phone Number</label>
-                                <input type="text" class="form--control" placeholder="+1 (800)-123-4567">
-                            </div>
-                            <div class="col-xl-6 col-lg-6 form-group">
-                                <label>Select your Training</label>
-                                <div class="account-widget-select">
-                                    <select class="form--control">
-                                        <option value="1">Kick Boxing</option>
-                                        <option value="2">English Boxing</option>
-                                        <option value="3">Personal Boxing</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-xl-12 form-group">
-                                <label>Write Message</label>
-                                <textarea class="form--control" placeholder="Start typing here"></textarea>
-                            </div>
-                            <div class="col-xl-12 form-group text-center">
-                                <button type="submit" class="btn--base mt-20">Get Enrolled Now <i class="fas fa-arrow-right ml-2"></i></button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
+            <form id="applyForm" class="account-widget-form">
+                <div class="row justify-content-center mb-20-none">
+                    <div class="col-xl-6 col-lg-6 form-group">
+                        <label>Enter Name</label>
+                        <input id="apply_name" name="name" type="text" class="form--control" placeholder="Micle Joncina">
+                    </div>
+                    <div class="col-xl-6 col-lg-6 form-group">
+                        <label>Email Adress</label>
+                        <input id="apply_email" name="email" type="email" class="form--control" placeholder="example@email.com">
+                    </div>
+                    <div class="col-xl-6 col-lg-6 form-group">
+                        <label>Phone Number</label>
+                        <input id="apply_phone" name="phone" type="text" class="form--control" placeholder="+1 (800)-123-4567">
+                    </div>
+                    <div class="col-xl-6 col-lg-6 form-group">
+                        <label>Select your Training</label>
+                        <div class="account-widget-select">
+                            <select id="apply_training" name="training" class="form--control">
+                                <option value="1">Kick Boxing</option>
+                                <option value="2">English Boxing</option>
+                                <option value="3">Personal Boxing</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 form-group">
+                        <label>Write Message</label>
+                        <textarea id="apply_message" name="message" class="form--control" placeholder="Start typing here"></textarea>
+                    </div>
+                    <div class="col-xl-12 form-group text-center">
+                        <button id="apply_submit" type="submit" class="btn--base mt-20">Get Enrolled Now <i class="fas fa-arrow-right ml-2"></i></button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-</section>
-<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    End Account widget
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+</div>
+
+<!-- Inline styles for the modal (kept small and local to this page) -->
+<style>
+    .apply-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9999}
+    .apply-modal.active{display:flex}
+    .apply-modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.6)}
+    .apply-modal-content{position:relative;background:#fff;max-width:920px;width:95%;border-radius:6px;z-index:2;box-shadow:0 30px 60px rgba(0,0,0,.4);overflow:auto;max-height:90vh}
+    .apply-modal-close{position:absolute;right:8px;top:8px;border:0;background:transparent;font-size:32px;line-height:1;color:#333;cursor:pointer}
+    .account-widget-form-area.p-30{padding:24px}
+    @media (max-width:576px){.apply-modal-content{width:96%;padding:12px}}
+</style>
+
+<!-- Script: modal behaviour + persist inputs in sessionStorage until reload or submit -->
+<script>
+    (function(){
+        var modal = document.getElementById('applyModal');
+        var overlay = modal && modal.querySelector('.apply-modal-overlay');
+        var closeBtn = modal && modal.querySelector('.apply-modal-close');
+        var form = document.getElementById('applyForm');
+        var storagePrefix = 'applyModal.';
+
+        if(!modal) return;
+
+        function openModal(){
+            modal.classList.add('active');
+            modal.setAttribute('aria-hidden','false');
+            document.body.style.overflow = 'hidden';
+            restoreInputs();
+            var first = modal.querySelector('input, textarea, select');
+            if(first) first.focus();
+        }
+
+        function closeModal(){
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden','true');
+            document.body.style.overflow = '';
+        }
+
+        // open when header-action clicked
+        document.querySelectorAll('.header-action a, .header-action').forEach(function(el){
+            el.addEventListener('click', function(e){
+                if(el.tagName.toLowerCase()==='a') e.preventDefault();
+                openModal();
+            });
+        });
+
+        // close on overlay click or close button
+        overlay.addEventListener('click', function(e){ if(e.target === overlay) closeModal(); });
+        closeBtn.addEventListener('click', closeModal);
+
+        // close on ESC
+        document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeModal(); });
+
+        // save inputs to sessionStorage on input/change
+        var inputs = modal.querySelectorAll('input[name], textarea[name], select[name]');
+        inputs.forEach(function(el){
+            el.addEventListener('input', saveInputs);
+            el.addEventListener('change', saveInputs);
+        });
+
+        function saveInputs(){
+            inputs.forEach(function(el){
+                try{
+                    sessionStorage.setItem(storagePrefix + el.name, el.value || '');
+                }catch(err){/* ignore storage errors */}
+            });
+        }
+
+        function restoreInputs(){
+            inputs.forEach(function(el){
+                try{
+                    var v = sessionStorage.getItem(storagePrefix + el.name);
+                    if(v !== null) el.value = v;
+                }catch(err){}
+            });
+        }
+
+        // clear storage when form is submitted
+        form.addEventListener('submit', function(e){
+            try{
+                inputs.forEach(function(el){ sessionStorage.removeItem(storagePrefix + el.name); });
+            }catch(err){}
+            closeModal();
+        });
+
+        // also clear storage on page unload (reload/navigation)
+        window.addEventListener('beforeunload', function(){
+            try{
+                inputs.forEach(function(el){ sessionStorage.removeItem(storagePrefix + el.name); });
+            }catch(err){}
+        });
+    })();
+</script>
 
 
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
