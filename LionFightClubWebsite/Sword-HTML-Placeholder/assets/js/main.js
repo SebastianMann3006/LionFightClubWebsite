@@ -246,7 +246,7 @@ var swiper = new Swiper('.training-slider', {
 });
 
 var swiper = new Swiper('.trainer-slider', {
-  slidesPerView: 4,
+  slidesPerView: 3,
   spaceBetween: 0,
   loop: true,
   navigation: {

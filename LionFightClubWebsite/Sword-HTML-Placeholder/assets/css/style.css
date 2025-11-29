@@ -147,6 +147,27 @@ img {
   max-width: 100%;
   height: auto;
 }
+img.logo{
+  width: 180px;
+}
+img .special{
+  width: auto;
+}
+
+/* Carbon look background Bewertungen*/
+.bg-carbon {
+  background-color: #0b0b0b;
+  color: #e6e6e6;
+  background-image: url('../images/bg/carbon.svg');
+  background-repeat: repeat;
+  background-size: 40px 40px; /* denser pattern */
+}
+
+.bg-carbon a { color: #ffffff; }
+.bg-carbon .section-header.white h2.section-title, .bg-carbon .section-header.white p { color: #e6e6e6; }
+
+/* specific highlight for words that should be pure white */
+.bg-carbon .carbon-highlight { color: #ffffff; }
 
 button:focus, input[type="button"]:focus, input[type="reset"]:focus, input[type="submit"]:focus,
 input:focus,
@@ -947,7 +968,7 @@ blockquote .quote-icon {
   color: white;
   font-family: "Kanit", sans-serif;
   font-size: 18px;
-  padding: 15px 45px;
+  padding: 15px 15px;
   border-right: 1px solid rgba(255, 255, 255, 0.7);
   position: relative;
   z-index: 2;
@@ -2161,6 +2182,39 @@ option {
   position: relative;
 }
 
+/* Fixed black header for top of page — scoped to about.html only */
+body.about-fixed-header header.header-section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  background-color: #000 !important;
+}
+
+/* Ensure header links are readable on black (about only) */
+body.about-fixed-header header.header-section .navbar-nav .main-menu a,
+body.about-fixed-header header.header-section .site-logo img {
+  color: #fff !important;
+}
+
+/* Add a gap for the inner banner (Über uns) so header doesn't cover the image */
+body.about-fixed-header .inner-banner-section {
+  /* desktop default: roughly header height */
+  margin-top: 95px;
+}
+@media (max-width: 991px) {
+  /* slightly smaller gap on mobile */
+  body.about-fixed-header .inner-banner-section {
+    margin-top: 80px;
+  }
+}
+
+/* lighter overlay variant for Background Bewertungen */
+.bg-overlay-black.bg-overlay-light:after {
+  opacity: .35; /* lighter/dimmer darkening for better contrast Hintergrund BG7 zu dunkel */
+}
+
 .bg-overlay-red:after {
   content: "";
   position: absolute;
@@ -2879,7 +2933,7 @@ section {
   align-items: center;
   color: black;
   display: flex;
-  font-size: 17px;
+  font-size: 19px;
   transition: all 0.5s;
   z-index: 10;
 }
@@ -3968,6 +4022,16 @@ section {
     font-size: 35px;
   }
 }
+
+/* push the banner heading lower so it's not too close to the top/header */
+.inner-banner-section .banner-content {
+  padding-top: 100px;
+}
+@media only screen and (max-width: 991px) {
+  .inner-banner-section .banner-content {
+    padding-top: 60px;
+  }
+}
 .inner-banner-section .banner-content .title span {
   color: #e80000;
 }
@@ -4468,6 +4532,7 @@ div[class*="col"]:nth-of-type(4n + 4) .trainer-item:hover {
   position: relative;
   overflow: hidden;
   border-radius: 135px;
+  border: 3px solid #000;
 }
 .trainer-thumb img {
   width: 100%;
@@ -4747,6 +4812,34 @@ div[class*="col"]:nth-of-type(4n + 4) .trainer-item:hover {
 
 .trainer-details-section {
   position: relative;
+}
+
+/* Ensure the trainer-section (Unsere Experten) has a white background */
+.trainer-section.trainer-section--style {
+  background-image: none !important;
+  background-color: #ffffff !important;
+}
+
+/* Hide overlay pseudo-elements for this specific trainer section so white shows through */
+.trainer-section.trainer-section--style.bg-overlay-black:after,
+.trainer-section.trainer-section--style.bg-overlay-base:after,
+.trainer-section.trainer-section--style.bg-overlay-red:after {
+  display: none !important;
+  background: transparent !important;
+  opacity: 0 !important;
+}
+
+/* Remove any assigned bg_img background on this section */
+.trainer-section.trainer-section--style.bg_img {
+  background-image: none !important;
+}
+
+/* Ensure text inside the trainer section is black for readability on white */
+.trainer-section.trainer-section--style .section-header.white .section-title,
+.trainer-section.trainer-section--style .section-header.white p,
+.trainer-section.trainer-section--style .trainer-content .title a,
+.trainer-section.trainer-section--style .trainer-content .sub-title {
+  color: #000000 !important;
 }
 .trainer-details-section .trainer-details-element-one {
   position: absolute;
@@ -5817,6 +5910,59 @@ div[class*="col"]:nth-of-type(4n + 4) .trainer-item:hover {
 .training-section--style .training-content .title a {
   transition: all 0.5s;
 }
+
+/* Make training items equal height: use flex so content fills card and footers align */
+.training-section--style .row > [class*="col-"] {
+  display: flex;
+  align-items: stretch;
+}
+.training-section--style .training-item {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: 0;
+}
+.training-section--style .training-thumb {
+  /* keep image at top, allow it to size naturally */
+  flex: 0 0 auto;
+}
+.training-section--style .training-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 25px;
+}
+.training-section--style .training-content p {
+  /* allow paragraph to take remaining space so footers align */
+  flex: 1 1 auto;
+  margin-bottom: 15px;
+}
+@media only screen and (max-width: 767px) {
+  /* On small screens keep default stacking and spacing */
+  .training-section--style .row > [class*="col-"] {
+    display: block;
+  }
+  .training-section--style .training-item {
+    display: block;
+  }
+  .training-section--style .training-content p {
+    margin-bottom: 10px;
+  }
+}
+
+/* Utility: force columns inside .stack-vertical to stack vertically (full-width) */
+.stack-vertical > [class*="col-"] {
+  -ms-flex: 0 0 100% !important;
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+}
+.stack-vertical {
+  display: block;
+}
+.stack-vertical > [class*="col-"] + [class*="col-"] {
+  margin-top: 20px; /* spacing between stacked columns */
+}
 .training-section--style .training-content .title a:hover {
   color: #e80000;
 }
@@ -5849,6 +5995,12 @@ div[class*="col"]:nth-of-type(4n + 4) .trainer-item:hover {
   color: #e80000;
   font-size: 24px;
   transition: all 0.5s;
+}
+
+/* Ensure the footer-arrow button sits at the lower-right of each training card */
+.training-section--style .training-content .training-footer-area .training-footer-btn {
+  margin-left: auto; /* push to right even when it's the only child */
+  align-self: flex-end;
 }
 
 .load-more-btn a:hover {
@@ -5952,6 +6104,34 @@ div[class*="col"]:nth-of-type(4n + 4) .trainer-item:hover {
   font-size: 11px;
   border-radius: 50%;
   color: white;
+}
+.page-mma .training-details-section .learn-widget-wrapper .row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.page-mma .training-details-section .learn-widget-wrapper .row > [class*="col-"] {
+  display: flex;
+  flex-direction: column;
+}
+.page-mma .training-details-section .learn-widget-item {
+  min-height: 140px;
+  display: flex;
+  align-items: stretch;
+}
+.page-mma .training-details-section .learn-widget-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.page-mma .training-details-section .learn-widget-content p {
+  margin-top: 10px;
+  margin-bottom: 0;
+  flex: 1 1 auto;
+}
+@media only screen and (max-width: 767px) {
+  .page-mma .training-details-section .learn-widget-item {
+    min-height: auto;
+  }
 }
 
 .timer-widget-area {
@@ -6932,9 +7112,12 @@ div[class*="col"]:nth-of-type(4n + 4) .trainer-item:hover {
   border-radius: 10px;
   overflow: hidden;
   z-index: 2;
+  height: 300px;
 }
 .service-thumb img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
   overflow: hidden;
   transition: all 0.5s;
 }
@@ -8591,10 +8774,6 @@ div[class*="col"]:nth-of-type(4n + 4) .choose-item::after {
   }
 }
 
-.blog-item:hover .blog-thumb img {
-  transform: scale(1.2);
-}
-
 .blog-thumb {
   overflow: hidden;
   border-radius: 10px;
@@ -9268,4 +9447,35 @@ div[class*="col"]:nth-of-type(4n + 4) .choose-item::after {
 }
 .blog-widget-thumb .blog-widget-video .waves {
   background: white;
+}
+
+/* Trial button styling for header */
+.header-bottom-area .navbar-collapse .main-menu li a.trial-btn,
+.header-bottom-area .navbar-collapse .main-menu li .trial-btn {
+  background-color: #e80000;
+  color: #fff !important;
+  padding: 12px 28px;
+  border-radius: 999px; /* pill */
+  display: inline-block;
+  font-weight: 700;
+  text-transform: none;
+  box-shadow: 0 6px 18px rgba(232, 0, 0, 0.12);
+  transition: background-color .18s ease, color .18s ease, transform .12s ease;
+}
+.header-bottom-area .navbar-collapse .main-menu li a.trial-btn:hover {
+  background-color: #ff7b7b; /* lighter red on hover for better contrast with black text */
+  color: #000 !important;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 1199px) {
+  /* make the button full-width in the collapsed mobile menu */
+  .header-bottom-area .navbar-collapse .main-menu li a.trial-btn {
+    display: block;
+    width: calc(100% - 30px);
+    margin: 10px 15px;
+    text-align: center;
+    padding: 12px 18px; /* slightly reduce horizontal padding on mobile */
+    border-radius: 12px; /* keep nicely rounded on full-width items */
+  }
 }
